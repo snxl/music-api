@@ -1,0 +1,97 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "example",
+        "description": "example",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:port",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "data provider",
+            "description":"all data from the provider with a date as parameter"
+        }
+    ],
+    "schemes": ["http", "https"],
+    "paths":{
+        "/route/example":{
+            "get":{
+                "tags":["data provider"],
+                "summary":"find all user data",
+                "operationId":"dataProviderDate",
+                "produces":["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "date",
+                    "description":"date for filter",
+                    "required": true,
+                    "type": "string",
+                    "minimum": 12
+                }],
+                "security":[
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"return datas",
+                        "schema":{
+                            "$ref":"#/definitions/status"
+                        }
+                    },
+                    "400":{
+                        "schema":{
+                            "$ref":"#/definitions/status"
+                        }
+                    },
+                    "401":{
+                        "description":"token is not provided",
+                        "schema":{
+                            "$ref":"#/definitions/status"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions":{
+        "Bearer":{
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "definitions":{
+        "update":{
+            "properties":{
+
+            }
+        },
+        "register":{
+            "properties":{
+
+            }
+        },
+        "status":{
+            "properties":{
+
+            }
+        },
+        "login":{
+            "properties":{
+
+            }
+        },
+        "schedule":{
+            "properties":{
+
+            }
+        }
+    }
+}
