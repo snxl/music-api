@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import * as multer from '../middlewares/multerMiddleware.js';
 import Authenticator from '../middlewares/auth.js';
+import AdminController from '../controller/admin.js';
+import AdminValidator from '../middlewares/adminMiddleware.js';
 
 const router = Router();
 
-// const text = multer.uploadText.any();
+router.delete('/user/:id', Authenticator.auth, AdminValidator.providerValidate, AdminController.deleteProfile);
+router.patch('/user/:id', Authenticator.auth, AdminValidator.providerValidate, AdminController.toProvider);
 
 export default router;

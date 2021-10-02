@@ -9,6 +9,7 @@ import fs from 'fs';
 import SwaggerUI from 'swagger-ui-express';
 
 import userRoutes from './routes/user.js';
+import adminRoutes from './routes/admin.js';
 
 dotenv.config();
 
@@ -24,7 +25,6 @@ export default class EntryPoint {
     }
 
     middlewares() {
-        this.app.enable('trust proxy');
         this.app.use(cors());
         this.app.use(logger('dev'));
         this.app.use(express.json());
@@ -37,6 +37,7 @@ export default class EntryPoint {
     }
 
     routes() {
+        this.app.use('/admin', adminRoutes);
         this.app.use('/user', userRoutes);
         this.app.use('/api-docs', SwaggerUI.serve, SwaggerUI.setup(JSON.parse(fs.readFileSync('./swagger.json', 'utf-8'))));
         this.error404();
