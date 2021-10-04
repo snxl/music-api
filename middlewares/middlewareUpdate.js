@@ -4,6 +4,7 @@ import db from '../database/models/index.js';
 
 export default class UpdateValidator {
     static async validade(req, res, next) {
+        const mimeImages = ['image/bmp', 'image/cis-cod', 'image/gif', 'image/ief', 'image/jpeg', 'image/pipeg', 'image/svg+xml'];
         const schema = yup.object().shape({
             name: yup.string(),
             email: yup.string().email('Must be a valid email'),
@@ -65,6 +66,14 @@ export default class UpdateValidator {
 
             for (const updated in req.body) {
                 if (!req.body[updated]) req.body[updated] = undefined;
+            }
+
+            if (req.file.mimetype
+                && !mimeImages.find((elm) => elm.toLocaleLowerCase() === req.file.mimetype.toLocaleLowerCase())) {
+                return res.status(400).json({
+                    status: 'ERR',
+                    description: 'Unsupported file type for operation',
+                });
             }
 
             next();
