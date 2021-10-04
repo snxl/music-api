@@ -5,6 +5,7 @@ import Files from '../controller/filesController.js';
 import InsertSong from '../middlewares/middlewareinsertSong.js';
 import DeleteMiddleware from '../middlewares/middlewareDeleteSong.js';
 import UpdatedSong from '../middlewares/middlewareUpdateSong.js';
+import GetPublicSongMiddleware from '../middlewares/middlewareGetPublicSong.js';
 
 const router = Router();
 
@@ -12,6 +13,6 @@ router.post('/', Authenticator.auth, multer.uploadSongs.single('song'), InsertSo
 router.delete('/:id', Authenticator.auth, DeleteMiddleware.validate, Files.detroySong);
 router.put('/:id', multer.uploadText.none(), Authenticator.auth, UpdatedSong.validate, Files.updatedSong);
 router.get('/:id', Authenticator.auth, Files.getPrivaeSong);
-router.get('/public/:id', Files.getPublicSongs);
+router.get('/public/:id', GetPublicSongMiddleware.validate, Files.getPublicSongs);
 
 export default router;

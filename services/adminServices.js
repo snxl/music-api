@@ -57,7 +57,7 @@ export default class AdminServices {
         const t = await sequelize.transaction();
         try {
             await db.Song.update({
-                private: status,
+                adminStatus: status,
             }, {
                 where: {
                     id,
@@ -79,5 +79,26 @@ export default class AdminServices {
         }
     }
 
-    static async destroySong(id) {}
+    static async destroySong(id) {
+        const t = await sequelize.transaction();
+        try {
+            const destroyFile = await db.Song.destroy({
+                where: {
+                    id,
+                },
+                transaction: t,
+            });
+            await t.commit();
+            return {
+                status: 'OK',
+                description: `lines deleted ${destroyFile}`,
+            };
+        } catch (error) {
+            await t.rollback();
+            return {
+                status: 'ERR',
+                description: 'Failed to destroy file',
+            };
+        }
+    }
 }

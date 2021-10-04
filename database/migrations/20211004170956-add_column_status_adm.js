@@ -7,6 +7,6 @@ module.exports = {
     },
 
     down: async (queryInterface) => {
-        await queryInterface.removeColumn('songs', 'avatarId');
+        await queryInterface.removeColumn('songs', 'adminStatus');
     },
 };

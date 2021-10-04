@@ -55,7 +55,7 @@ export default class FilesServices {
                         required: true,
                         attributes: ['id', 'name', 'email', 'provider', 'createdAt', 'updatedAt', 'avatarId'],
                     }],
-                }) || 'music by another author',
+                }) || 'music by another author or does not exist',
             };
         } catch (error) {
             return {
@@ -74,6 +74,7 @@ export default class FilesServices {
                     where: {
                         id,
                         private: false,
+                        adminStatus: false,
                     },
                     include: [{
                         model: db.User,

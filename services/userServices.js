@@ -44,6 +44,7 @@ export default class UserServices {
                         as: 'song',
                         required: false,
                     }],
+                    order: [['song', 'id', 'ASC']],
                 }),
             };
         } catch (error) {
@@ -181,12 +182,17 @@ export default class UserServices {
                     offset,
                     limit,
                     attributes: ['id', 'name', 'email', 'provider', 'createdAt', 'updatedAt', 'avatarId'],
+                    include: [{
+                        model: db.File,
+                        as: 'avatar',
+                        required: false,
+                    }],
                 }),
             };
         } catch (error) {
             return {
                 status: 'ERR',
-                description: 'Fail to create data',
+                description: 'Fail to get data',
             };
         }
     }

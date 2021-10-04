@@ -26,7 +26,11 @@ module.exports = (sequelize, DataTypes) => {
             references: { model: 'users', key: 'id' },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
-
+        },
+        adminStatus: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         },
         private: {
             type: DataTypes.BOOLEAN,

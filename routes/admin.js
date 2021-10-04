@@ -6,9 +6,9 @@ import AdminValidator from '../middlewares/adminMiddleware.js';
 const router = Router();
 
 router.delete('/user/:id', Authenticator.auth, AdminValidator.providerValidate, AdminController.deleteProfile);
-router.delete('/file/:id', Authenticator.auth, AdminValidator.providerValidate, AdminController.deleteSong);
+router.delete('/file/:id', Authenticator.auth, AdminValidator.validateDestroySong, AdminController.deleteSong);
 router.patch('/user/:id', Authenticator.auth, AdminValidator.providerValidate, AdminController.toProvider);
 router.patch('/file/private/status/:id/:status',
-    Authenticator.auth, AdminValidator.providerValidate, AdminController.statusHandler);
+    Authenticator.auth, AdminValidator.validateFileStatus, AdminController.statusHandler);
 
 export default router;

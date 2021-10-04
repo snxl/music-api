@@ -10,7 +10,7 @@ export default class AdminController {
     }
 
     static async deleteProfile(req, res) {
-        const serviceResponse = await AdminServices.destroySong(req.params.id);
+        const serviceResponse = await AdminServices.deleteUser(req.params.id);
 
         return serviceResponse.status === 'OK'
             ? res.status(200).json(serviceResponse)
@@ -18,7 +18,7 @@ export default class AdminController {
     }
 
     static async deleteSong(req, res) {
-        const serviceResponse = await AdminServices.deleteUser(req.params.id);
+        const serviceResponse = await AdminServices.destroySong(req.params.id);
 
         return serviceResponse.status === 'OK'
             ? res.status(200).json(serviceResponse)
