@@ -39,6 +39,10 @@ export default class UserServices {
                         model: db.File,
                         as: 'avatar',
                         required: false,
+                    }, {
+                        model: db.Song,
+                        as: 'song',
+                        required: false,
                     }],
                 }),
             };
@@ -176,6 +180,7 @@ export default class UserServices {
                 description: await db.User.findAll({
                     offset,
                     limit,
+                    attributes: ['id', 'name', 'email', 'provider', 'createdAt', 'updatedAt', 'avatarId'],
                 }),
             };
         } catch (error) {

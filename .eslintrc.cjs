@@ -14,6 +14,7 @@ module.exports = {
         },
     },
     rules: {
+        'max-len': ['error', { code: 130 }],
         'no-console': 'off',
         'import/prefer-default-export': 'off',
         'import/extensions': 'off',
@@ -48,6 +49,7 @@ module.exports = {
         'no-return-await': 'off',
         'prefer-rest-params': 'off',
     },
+
     ignorePatterns: '**/*.test.js',
 
 };

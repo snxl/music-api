@@ -10,6 +10,7 @@ import SwaggerUI from 'swagger-ui-express';
 
 import userRoutes from './routes/user.js';
 import adminRoutes from './routes/admin.js';
+import filesRoutes from './routes/files.js';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ export default class EntryPoint {
     }
 
     routes() {
+        this.app.use('/file', filesRoutes);
         this.app.use('/admin', adminRoutes);
         this.app.use('/user', userRoutes);
         this.app.use('/api-docs', SwaggerUI.serve, SwaggerUI.setup(JSON.parse(fs.readFileSync('./swagger.json', 'utf-8'))));

@@ -46,12 +46,6 @@ export default class UserController {
     static async getAll(req, res) {
         const { counter, page } = req.query;
 
-        console.log(counter, page);
-
-        if (counter && page) {
-            counter * page - counter;
-        }
-
         const serviceResponse = await UserServices.allUser(counter, page);
 
         return serviceResponse.status === 'OK'
