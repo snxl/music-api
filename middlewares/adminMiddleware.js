@@ -8,10 +8,21 @@ export default class AdminValidator {
         }
 
         if (Number(req.params.id) === req.userAuth.id) {
-            return res.status(400).json({
+            return res.status(401).json({
                 status: 'ERR',
                 description: 'The user must contain another id',
             });
+        }
+
+        if (req.params.status) {
+            if (!(req.params.status === 'true' || req.params.status === 'false')) {
+                return res.status(400).json({
+                    status: 'ERR',
+                    description: 'status parameter must be a boolean',
+                });
+            }
+
+            req.validateStatus = JSON.parse(req.params.status);
         }
 
         if (req.userAuth.provider === false) {

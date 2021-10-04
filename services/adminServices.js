@@ -52,4 +52,32 @@ export default class AdminServices {
             };
         }
     }
+
+    static async statusUpdate(id, status) {
+        const t = await sequelize.transaction();
+        try {
+            await db.Song.update({
+                private: status,
+            }, {
+                where: {
+                    id,
+                },
+                transaction: t,
+            });
+
+            await t.commit();
+            return {
+                status: 'OK',
+                description: 'File updated successfully',
+            };
+        } catch (error) {
+            await t.rollback();
+            return {
+                status: 'ERR',
+                description: 'Failed to updated file',
+            };
+        }
+    }
+
+    static async destroySong(id) {}
 }

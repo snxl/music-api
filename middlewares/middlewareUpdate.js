@@ -68,7 +68,7 @@ export default class UpdateValidator {
                 if (!req.body[updated]) req.body[updated] = undefined;
             }
 
-            if (req.file.mimetype
+            if (req.file
                 && !mimeImages.find((elm) => elm.toLocaleLowerCase() === req.file.mimetype.toLocaleLowerCase())) {
                 return res.status(400).json({
                     status: 'ERR',
