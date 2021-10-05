@@ -1,6 +1,6 @@
 export default {
     clearMocks: true,
-    restoreMocks: true,
+    // restoreMocks: true,
     collectCoverage: true,
     coverageDirectory: 'coverage',
     coverageProvider: 'v8',
@@ -22,6 +22,7 @@ export default {
     ],
     transformIgnorePatterns: ['node_modules'],
     collectCoverageFrom: [
-        './**/*.js', '!./app.js',
+        './**/*.js', '!./app.js', '!./database/migrations/*js', '!./database/seeders/*.js',
+        '!./bin/*.js', '!./configs/*.js', '!./routes/*.js', '!./database/models/*.js', '!./coverage/**/*.js',
     ],
 };

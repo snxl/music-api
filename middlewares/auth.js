@@ -21,8 +21,11 @@ export default class Authenticator {
 
             const user = await db.User.findByPk(decode.id);
 
-            if (user) next();
-            else throw new Error();
+            if (user) {
+                next();
+            } else {
+                throw new Error();
+            }
         } catch (error) {
             return res.status(401).json({
                 status: 'ERR',

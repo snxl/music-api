@@ -33,7 +33,6 @@ export default class Validate {
                         .oneOf([yup.ref('password')], 'Incorrect password'),
                 }),
         });
-
         try {
             await schema.validate(req.body, { abortEarly: false });
 
