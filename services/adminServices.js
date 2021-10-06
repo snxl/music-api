@@ -1,7 +1,5 @@
 import db from '../database/models/index.js';
 
-const { sequelize } = db;
-
 export default class AdminServices {
     static async deleteUser(id) {
         try {
