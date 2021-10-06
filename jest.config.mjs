@@ -24,5 +24,6 @@ export default {
     collectCoverageFrom: [
         './**/*.js', '!./app.js', '!./database/migrations/*js', '!./database/seeders/*.js',
         '!./bin/*.js', '!./configs/*.js', '!./routes/*.js', '!./database/models/*.js', '!./coverage/**/*.js',
+        '!./middlewares/multerMiddleware.js',
     ],
 };

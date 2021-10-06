@@ -17,7 +17,7 @@ export default class ValidateLogin {
             const user = await db.User.findOne({ where: { email } });
 
             if (!user) {
-                return res.status(401).json({
+                return res.status(400).json({
                     status: 'ERR',
                     description: 'user not found',
                 });
