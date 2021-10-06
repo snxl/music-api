@@ -239,15 +239,13 @@ describe('#Suit tests controllers', ()=>{
             const req = params.mockRequest()
             const res = params.mockResponse()
 
-            req.file = {}
-
             jest.spyOn(ServiceUser, 'update').mockResolvedValueOnce({status:'OK'})
+            delete req.file
 
             await UserController.updatedUser(req, res)
 
             expect(res.status).toHaveBeenCalledWith(200)
             expect(res.json).toHaveBeenCalledWith({status:'OK'})
-
             
             jest.spyOn(ServiceUser, 'update').mockResolvedValueOnce({status:'ERR'})
 
