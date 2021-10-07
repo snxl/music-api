@@ -1,97 +1,1337 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "1.0.0",
-        "title": "example",
-        "description": "example",
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+    "openapi": "3.0.0",
+    "info":{
+        "title": "Music api",
+        "description":"Open API for music control",
+        "version":"1.0.0",
+        "contact":{
+            "email":"email@email.com"
         }
     },
-    "host": "localhost:port",
-    "basePath": "/",
-    "tags": [
-        {
-            "name": "data provider",
-            "description":"all data from the provider with a date as parameter"
-        }
-    ],
-    "schemes": ["http", "https"],
     "paths":{
-        "/route/example":{
-            "get":{
-                "tags":["data provider"],
-                "summary":"find all user data",
-                "operationId":"dataProviderDate",
-                "produces":["application/json"],
-                "parameters": [{
-                    "in": "query",
-                    "name": "date",
-                    "description":"date for filter",
-                    "required": true,
-                    "type": "string",
-                    "minimum": 12
-                }],
-                "security":[
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "description":"return datas",
-                        "schema":{
-                            "$ref":"#/definitions/status"
+        "/user":{
+            "post":{
+                "tags":["User"],
+                "summary":"Create a new user",
+                "description": "Create a new user and return a token",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "name":{
+                                    "type":"string"
+                                },
+                                "email":{
+                                    "type":"string"
+                                },
+                                "password":{
+                                    "type":"string"
+                                },
+                                "passwordConfirm":{
+                                    "type":"string"
+                                }
+                            },
+                            "example":{
+                                "name":"nameTest",
+                                "email":"email@test.com",
+                                "password":"Password123",
+                                "passwordConfirm":"Password123"
+                            }
                         }
-                    },
-                    "400":{
-                        "schema":{
-                            "$ref":"#/definitions/status"
+                    }
+                },
+                "responses":{
+                    "201":{
+                        "description": "User created",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
                     "401":{
-                        "description":"token is not provided",
-                        "schema":{
-                            "$ref":"#/definitions/status"
+                        "description": "Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Validation fails",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        },
+                                        "errors":{
+                                            "type":"array",
+                                            "items": {
+                                                "type": "string"
+                                              }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get":{
+                "tags":["User"],
+                "summary":"Get User Data",
+                "description":"Get user data from personal token",
+                "responses":{
+                    "200":{
+                        "description":"Returned data user",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Failed to get data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "put":{
+                "tags":["User"],
+                "summary":"Change user data",
+                "description":"Change user data from personal token",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "name":{
+                                        "type":"string"
+                                    },
+                                    "email":{
+                                        "type":"string"
+                                    },
+                                    "password":{
+                                        "type":"string"
+                                    },
+                                    "passwordConfirm":{
+                                        "type":"string"
+                                    },
+                                    "oldPassword":{
+                                        "type":"string"
+                                    },
+                                    "avatar":{
+                                        "type":"string",
+                                        "format":"binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"User updated",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Fail to destroy account",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "delete":{
+                "tags":["User"],
+                "summary":"Delete user",
+                "description":"Delete user from personal token",
+                "responses":{
+                    "200":{
+                        "description":"User deleted",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "affectedRows":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Fail to destroy account",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/user/login":{
+            "post":{
+                "tags":["User"],
+                "summary":"Login user",
+                "description": "Login user and get token",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "name":{
+                                    "type":"string"
+                                },
+                                "email":{
+                                    "type":"string"
+                                }
+                            },
+                            "example":{
+                                "email":"email@test.com",
+                                "password":"Password123"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description": "User logged",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Validation fails",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        },
+                                        "errors":{
+                                            "type":"array",
+                                            "items": {
+                                                "type": "string"
+                                              }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+        },
+        "/user/allusers":{
+            "get":{
+                "tags":["User"],
+                "summary":"Get all users",
+                "description":"Get all platform users",
+                "parameters": [
+                    {
+                      "in": "query",
+                      "name": "page",
+                      "schema": {
+                        "type": "integer"
+                      },
+                      "description": "number of users to be returned per search"
+                    },
+                    {
+                      "in": "query",
+                      "name": "counter",
+                      "schema": {
+                        "type": "integer"
+                      },
+                      "description": "number of users to be skipped in the search"
+                    }
+                  ],
+                "responses":{
+                    "200":{
+                        "description":"Returned all user",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Failed to get data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/admin/user/{id}":{
+            "delete":{
+                "tags":["Administrator"],
+                "summary":"Delete user by admin",
+                "description":"Delete user with admin rights",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be delete",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                "responses":{
+                    "200":{
+                        "description": "Delete user by admin",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Validation fails",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        },
+                                        "errors":{
+                                            "type":"array",
+                                            "items": {
+                                                "type": "string"
+                                              }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "User recognized but access is denied",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "patch":{
+                "tags":["Administrator"],
+                "summary":"Turn user into admin",
+                "description":"Admin grants admin rights to user",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be patch",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                "responses":{
+                    "200":{
+                        "description": "User updated",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Validation fails",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        },
+                                        "errors":{
+                                            "type":"array",
+                                            "items": {
+                                                "type": "string"
+                                              }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "User recognized but access is denied",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/admin/file/{id}":{
+            "delete":{
+                "tags":["Administrator"],
+                "summary":"Delete User Music",
+                "description":"Delete user music with admin rights",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be delete",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                "responses":{
+                    "200":{
+                        "description": "Delete user",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Validation fails",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        },
+                                        "errors":{
+                                            "type":"array",
+                                            "items": {
+                                                "type": "string"
+                                              }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "User recognized but access is denied",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "patch":{
+                "tags":["Administrator"],
+                "summary":"Change music status",
+                "description":"Change music status with administrator rights",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be patch",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                "responses":{
+                    "200":{
+                        "description": "Change status music",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Not authorized",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Validation fails",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        },
+                                        "errors":{
+                                            "type":"array",
+                                            "items": {
+                                                "type": "string"
+                                              }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "User recognized but access is denied",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/file":{
+            "post":{
+                "tags":["Music"],
+                "summary":"Record music",
+                "description":"Record music on the platform",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "tittle":{
+                                        "type":"string"
+                                    },
+                                    "artist":{
+                                        "type":"string"
+                                    },
+                                    "songwriter":{
+                                        "type":"string"
+                                    },
+                                    "private":{
+                                        "type":"string"
+                                    },
+                                    "genre":{
+                                        "type":"string"
+                                    },
+                                    "song":{
+                                        "type":"string",
+                                        "format":"binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Record music",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Failed to validate data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/file/{id}":{
+            "delete":{
+                "tags":["Music"],
+                "summary":"Delete music",
+                "description":"Delete music on the platform",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be delete",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "responses":{
+                    "201":{
+                        "description":"Delete file",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Failed to validate data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "put":{
+                "tags":["Music"],
+                "summary":"Chage music",
+                "description":"Change music data on platform",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be delete",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "responses":{
+                    "201":{
+                        "description":"File updated",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Failed to validate data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            },
+            "get":{
+                "tags":["Music"],
+                "summary":"Get a private music",
+                "description":"Get a song that is private with a personal token",
+                "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of user that needs to be delete",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                "responses":{
+                    "200":{
+                        "description":"Return get",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Failed to validate data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                  ]
+            }
+        },
+        "/files/public/{id}":{
+            "get":{
+                "tags":["Music"],
+                "summary":"Get a public music",
+                "description":"Get a song that is public with a personal token",
+                "parameters": [
+                    {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of user that needs to be delete",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Return get",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "token":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Fail to validate data",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description":"Token not provided",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "status":{
+                                            "type":"string"
+                                        },
+                                        "description":{
+                                            "type":"string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                    "bearerAuth": []
+                    }
+                ]
+            }
         }
+
     },
-    "securityDefinitions":{
-        "Bearer":{
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        }
-    },
-    "definitions":{
-        "update":{
-            "properties":{
-
-            }
-        },
-        "register":{
-            "properties":{
-
-            }
-        },
-        "status":{
-            "properties":{
-
-            }
-        },
-        "login":{
-            "properties":{
-
-            }
-        },
-        "schedule":{
-            "properties":{
-
-            }
+    "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "Bearer",
+            "bearerFormat": "JWT"
+          }
         }
     }
 }

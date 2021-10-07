@@ -1,7 +1,7 @@
 import JsonWebToken from '../utils/jwt.js';
 import db from '../database/models/index.js';
 
-const { sequelize, Sequelize } = db;
+const { Sequelize } = db;
 
 const { Op } = Sequelize;
 
@@ -98,7 +98,6 @@ export default class UserServices {
     }
 
     static async update(unique, file, data) {
-
         try {
             const user = await db.User.findOne({
                 where: {
@@ -160,7 +159,7 @@ export default class UserServices {
                     id, name, email, provider,
                 }),
             };
-        } catch (error) {           
+        } catch (error) {
             return {
                 status: 'ERR',
                 description: 'Fail to update data',
