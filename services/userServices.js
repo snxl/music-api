@@ -98,7 +98,6 @@ export default class UserServices {
     }
 
     static async update(unique, file, data) {
-        const t = await sequelize.transaction();
 
         try {
             const user = await db.User.findOne({
@@ -110,7 +109,6 @@ export default class UserServices {
                     model: db.File,
                     as: 'avatar',
                     required: false,
-                    transaction: t,
                 }],
             });
 
@@ -133,7 +131,6 @@ export default class UserServices {
                     where: {
                         id: user.avatar.id,
                     },
-                    transaction: t,
                 });
 
                 fileOperation.id = id;
@@ -151,14 +148,12 @@ export default class UserServices {
                 },
                 returning: true,
                 plain: true,
-                transaction: t,
             });
 
             const {
                 id, name, email, provider,
             } = userUpdated[1];
 
-            await t.commit();
             return {
                 status: 'OK',
                 token: await JsonWebToken.createToken({
@@ -166,7 +161,6 @@ export default class UserServices {
                 }),
             };
         } catch (error) {
-            await t.rollback();
             return {
                 status: 'ERR',
                 description: 'Fail to update data',
