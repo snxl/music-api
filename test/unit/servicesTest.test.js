@@ -16,11 +16,6 @@ import JsonWebToken from "../../utils/jwt.js"
 
 describe('#Service test suit', ()=>{
 
-
-    describe('#Service files test', ()=>{
-
-    })
-
     describe('#Service admin test', ()=>{
 
         test('it should delete a user', async ()=>{
@@ -247,6 +242,114 @@ describe('#Service test suit', ()=>{
 
             expect(service.status).toBe('ERR')
             expect(service.description).toBe('Fail to get data')
+        })
+    })
+    describe('#Service files test', ()=>{
+        test('it should insert music', async ()=>{
+
+            jest.spyOn(db.Song, 'create').mockResolvedValue()
+
+            let service;
+
+            service = await ServiceFiles.store(undefined, {filename:'test'}, {id:1})
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe(undefined)
+
+            jest.spyOn(db.Song, 'create').mockRejectedValue()
+
+            
+            service = await ServiceFiles.store(undefined, {filename:'test'}, {id:1})
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Failed to create data')
+        })
+
+        test('it should destroy music', async ()=>{
+
+            jest.spyOn(db.Song, 'destroy').mockResolvedValue()
+
+            let service;
+
+            service = await ServiceFiles.destroy(1)
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe('File deleted successfully')
+
+            jest.spyOn(db.Song, 'destroy').mockRejectedValue()
+
+            
+            service = await ServiceFiles.destroy(1)
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Failed to delete file')
+        })
+
+        test('it should get private songs with personal token', async ()=>{
+
+            jest.spyOn(db.Song, 'findOne').mockResolvedValue('Ok')
+
+            let service;
+
+            service = await ServiceFiles.getPrivateSong(1)
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe('Ok')
+
+            jest.spyOn(db.Song, 'findOne').mockResolvedValue(null)
+
+            service = await ServiceFiles.getPrivateSong(1)
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe('music by another author or does not exist')
+
+            jest.spyOn(db.Song, 'findOne').mockRejectedValue()
+
+            
+            service = await ServiceFiles.getPrivateSong(1)
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Failed to get data')
+        })
+
+
+        test('it should get public songs without personal token', async ()=>{
+
+            jest.spyOn(db.Song, 'findOne').mockResolvedValue('Ok')
+
+            let service;
+
+            service = await ServiceFiles.getPublicSong({id:1})
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe('Ok')
+
+            jest.spyOn(db.Song, 'findOne').mockResolvedValue(null)
+ 
+            service = await ServiceFiles.getPublicSong({id:1})
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Failed to get data')
+        })
+
+        test('it should update the files', async ()=>{
+
+            jest.spyOn(db.Song, 'update').mockResolvedValue(Promise.resolve('OK'))
+
+            let service;
+
+            service = await ServiceFiles.updatedFile(null, 1)
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe('OK')
+
+            jest.spyOn(db.Song, 'update').mockRejectedValue()
+
+            
+            service = await ServiceFiles.updatedFile(null, 1)
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Failed to updated file')
         })
     })
 })

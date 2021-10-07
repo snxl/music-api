@@ -12,7 +12,6 @@ export default class FilesServices {
                 }),
             };
         } catch (error) {
-            console.log(error);
             return {
                 status: 'ERR',
                 description: 'Failed to create data',
