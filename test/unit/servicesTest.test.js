@@ -8,8 +8,6 @@ import {
 
 import db from "../../database/models/index.js"
 
-const { sequelize } = db
-
 import ServiceAdmin from "../../services/adminServices.js"
 import ServiceFiles from "../../services/filesServices.js"
 import UserServices from "../../services/userServices.js"
@@ -17,6 +15,11 @@ import UserServices from "../../services/userServices.js"
 import JsonWebToken from "../../utils/jwt.js"
 
 describe('#Service test suit', ()=>{
+
+
+    describe('#Service files test', ()=>{
+
+    })
 
     describe('#Service admin test', ()=>{
 
@@ -100,6 +103,7 @@ describe('#Service test suit', ()=>{
         })
     })
     describe('#Service user test', ()=>{
+        
         test('it should register a user', async ()=>{
 
             jest.spyOn(db.User, 'create').mockResolvedValueOnce({id:'1', name:'test', email:'test', provider:'test',})
@@ -119,18 +123,18 @@ describe('#Service test suit', ()=>{
             expect(service.description).toBe('Fail to create data')
         })
 
-        test('it should destroy the audio file', async ()=>{
+        test('it should get data with user token', async ()=>{
 
-            jest.spyOn(db.User, 'findOne').mockResolvedValueOnce()
+            jest.spyOn(db.User, 'findOne').mockResolvedValueOnce('test')
             
             let service
             
-            service = await UserServices.findProfileWithToken()
-
+            service = await UserServices.findProfileWithToken(1)
+            
             expect(service.status).toBe('OK')
             expect(service.description).toBe('test')
 
-            jest.spyOn(db.User, 'findOne').mockRejectedValueOnce()
+            jest.spyOn(db.User, 'findOne').mockRejectedValue()
         
             service = await UserServices.findProfileWithToken()
 
@@ -138,23 +142,23 @@ describe('#Service test suit', ()=>{
             expect(service.description).toBe('Fail to get data')
         })
 
-        test('it should destroy the audio file', async ()=>{
+        test('it should delete a user', async ()=>{
 
-            jest.spyOn(db.User, 'create').mockResolvedValueOnce({id:'1', name:'test', email:'test', provider:'test',})
+            jest.spyOn(db.User, 'destroy').mockResolvedValueOnce('1')
             
             let service
             
-            service = await UserServices.store()
+            service = await UserServices.destroy(1)
 
             expect(service.status).toBe('OK')
-            expect(typeof service.token).toBe('string')
+            expect(service.affectedRows).toBe('1')
 
-            jest.spyOn(db.User, 'create').mockRejectedValueOnce()
+            jest.spyOn(db.User, 'destroy').mockRejectedValueOnce()
         
-            service = await UserServices.store()
+            service = await UserServices.destroy()
 
             expect(service.status).toBe('ERR')
-            expect(service.description).toBe('Fail to create data')
+            expect(service.description).toBe('Fail to destroy account')
         })
 
         test('it should destroy the audio file', async ()=>{
@@ -176,45 +180,23 @@ describe('#Service test suit', ()=>{
             expect(service.description).toBe('Fail to create data')
         })
 
-        test('it should destroy the audio file', async ()=>{
+        test('it should login user', async ()=>{
 
-            jest.spyOn(db.User, 'create').mockResolvedValueOnce({id:'1', name:'test', email:'test', provider:'test',})
-            
-            let service
-            
-            service = await UserServices.store()
+            jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(Promise.resolve({id: 1, name: 'teste', email:'test', provider:'test', createdAt:'', updatedAt:''}))
 
-            expect(service.status).toBe('OK')
-            expect(typeof service.token).toBe('string')
+            let service;
 
-            jest.spyOn(db.User, 'create').mockRejectedValueOnce()
-        
-            service = await UserServices.store()
-
-            expect(service.status).toBe('ERR')
-            expect(service.description).toBe('Fail to create data')
-        })
-
-        test('it should destroy the audio file', async ()=>{
-
-            jest.spyOn(db.User, 'create').mockResolvedValueOnce({id:'1', name:'test', email:'test', provider:'test',})
-            
-            let service
-            
-            service = await UserServices.store()
+            service = await UserServices.login({email:'test'})
 
             expect(service.status).toBe('OK')
             expect(typeof service.token).toBe('string')
 
-            jest.spyOn(db.User, 'create').mockRejectedValueOnce()
-        
-            service = await UserServices.store()
+            jest.spyOn(db.User, 'findOne').mockRejectedValue()
+            
+            service = await UserServices.login({email:'test'})
 
             expect(service.status).toBe('ERR')
             expect(service.description).toBe('Fail to create data')
         })
-    })
-    describe('#Service files test', ()=>{
-        
     })
 })

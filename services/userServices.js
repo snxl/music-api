@@ -30,7 +30,22 @@ export default class UserServices {
         try {
             return {
                 status: 'OK',
-                description: await db.User.findOne(),
+                description: await db.User.findOne({
+                    where: {
+                        id: data.id,
+                    },
+                    attributes: ['id', 'name', 'email', 'provider', 'createdAt', 'updatedAt'],
+                    include: [{
+                        model: db.File,
+                        as: 'avatar',
+                        required: false,
+                    }, {
+                        model: db.Song,
+                        as: 'song',
+                        required: false,
+                    }],
+                    order: [['song', 'id', 'ASC']],
+                }),
             };
         } catch (error) {
             return {
