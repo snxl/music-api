@@ -120,7 +120,7 @@ export default class UserServices {
                 const { id } = await db.File.create({
                     name: file.originalname,
                     path: file.filename,
-                }, { transaction: t });
+                });
 
                 fileOperation.id = id;
             } else if (file && user.avatar) {
@@ -160,7 +160,7 @@ export default class UserServices {
                     id, name, email, provider,
                 }),
             };
-        } catch (error) {
+        } catch (error) {           
             return {
                 status: 'ERR',
                 description: 'Fail to update data',

@@ -198,5 +198,55 @@ describe('#Service test suit', ()=>{
             expect(service.status).toBe('ERR')
             expect(service.description).toBe('Fail to create data')
         })
+
+        test('it should update user', async ()=>{
+
+            jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(Promise.resolve({id: 1, name: 'teste', email:'test', provider:'test', createdAt:'', updatedAt:''}))
+            jest.spyOn(db.User, 'update').mockResolvedValueOnce(Promise.resolve([null, {id: 1, name: 'teste', email:'test', provider:'test', createdAt:'', updatedAt:''}]))
+            jest.spyOn(db.File, 'create').mockResolvedValueOnce(Promise.resolve({id: 1}))
+
+            let service;
+
+            service = await UserServices.update({id:1, email:'test'}, true, undefined)
+
+            expect(service.status).toBe('OK')
+            expect(typeof service.token).toBe('string')
+
+
+            jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(Promise.resolve({id: 1, name: 'teste', email:'test', provider:'test', avatar: true, createdAt:'', updatedAt:''}))
+            jest.spyOn(db.User, 'update').mockResolvedValueOnce(Promise.resolve([null, {id: 1, name: 'teste', email:'test', provider:'test', createdAt:'', updatedAt:''}]))
+            jest.spyOn(db.File, 'create').mockResolvedValueOnce(Promise.resolve({id: 1}))
+
+            service = await UserServices.update({id:1, email:'test'}, true, undefined)
+
+            expect(service.status).toBe('OK')
+            expect(typeof service.token).toBe('string')
+
+            jest.spyOn(db.User, 'findOne').mockRejectedValue()
+
+            service = await UserServices.update({id:1, email:'test'}, true, undefined)
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Fail to update data')
+        })
+
+        test('it should list all users', async ()=>{
+
+            jest.spyOn(db.User, 'findAll').mockResolvedValueOnce(Promise.resolve('OK'))
+
+            let service;
+
+            service = await UserServices.allUser({email:'test'})
+
+            expect(service.status).toBe('OK')
+            expect(service.description).toBe('OK')
+
+            jest.spyOn(db.User, 'findAll').mockRejectedValueOnce()
+
+            service = await UserServices.allUser({email:'test'})
+
+            expect(service.status).toBe('ERR')
+            expect(service.description).toBe('Fail to get data')
+        })
     })
 })
