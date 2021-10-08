@@ -20,4 +20,6 @@ const serverSsl = https.createServer({
 }, entry.app);
 
 server.listen(port, () => process.stdout.write(`SERVER HTTP RUNNING IN PORT: ${port}\nhttp://localhost:${port} \n\n`));
-serverSsl.listen(portTls, () => process.stdout.write(`SERVER HTTPS RUNNING IN PORT: ${portTls}\nhttps://localhost:${portTls}\n\n`));
+serverSsl.listen(portTls, () => process.stdout.write(
+    `SERVER HTTPS RUNNING IN PORT: ${portTls}\nhttps://localhost:${portTls}\n\n`,
+));
