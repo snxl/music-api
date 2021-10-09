@@ -718,7 +718,7 @@
                     {
                       "name": "id",
                       "in": "path",
-                      "description": "ID of user that needs to be delete",
+                      "description": "ID of the song that needs to be deleted by admin",
                       "required": true,
                       "schema": {
                         "type": "string"
@@ -810,7 +810,9 @@
                       "bearerAuth": []
                     }
                   ]
-            },
+            }
+        },
+        "/admin/file/private/status/{id}/{status}":{
             "patch":{
                 "tags":["Administrator"],
                 "summary":"Change music status",
@@ -819,11 +821,20 @@
                     {
                       "name": "id",
                       "in": "path",
-                      "description": "ID of user that needs to be patch",
+                      "description": "ID of music that needs to be patch",
                       "required": true,
                       "schema": {
                         "type": "string"
                       }
+                    },
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "description": "File status to be changed",
+                        "required": true,
+                        "schema": {
+                          "type": "boolean"
+                        }
                     }
                   ],
                 "responses":{
@@ -934,7 +945,7 @@
                                         "type":"string"
                                     },
                                     "private":{
-                                        "type":"string"
+                                        "type":"boolean"
                                     },
                                     "genre":{
                                         "type":"string"
@@ -1020,7 +1031,7 @@
                     {
                       "name": "id",
                       "in": "path",
-                      "description": "ID of user that needs to be delete",
+                      "description": "ID of music that needs to be delete",
                       "required": true,
                       "schema": {
                         "type": "string"
@@ -1093,11 +1104,37 @@
                 "tags":["Music"],
                 "summary":"Chage music",
                 "description":"Change music data on platform",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "tittle":{
+                                        "type":"string"
+                                    },
+                                    "artist":{
+                                        "type":"string"
+                                    },
+                                    "songwriter":{
+                                        "type":"string"
+                                    },
+                                    "private":{
+                                        "type":"boolean"
+                                    },
+                                    "genre":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "parameters": [
                     {
                       "name": "id",
                       "in": "path",
-                      "description": "ID of user that needs to be delete",
+                      "description": "ID of the private song that needs to be changed",
                       "required": true,
                       "schema": {
                         "type": "string"
@@ -1174,7 +1211,7 @@
                     {
                       "name": "id",
                       "in": "path",
-                      "description": "ID of user that needs to be delete",
+                      "description": "ID of the private song that needs to be obtained",
                       "required": true,
                       "schema": {
                         "type": "string"
@@ -1253,7 +1290,7 @@
                     {
                     "name": "id",
                     "in": "path",
-                    "description": "ID of user that needs to be delete",
+                    "description": "song id that needs to be obtained",
                     "required": true,
                     "schema": {
                         "type": "string"
