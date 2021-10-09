@@ -19,6 +19,6 @@
 #### DB_DATABASE_AWS
 #### HOST    #REQUIRED
 #### DIALECT    #REQUIRED-POSTGRES
-#### TIMEZONE    #MAY-BE-COMING
+#### TIMEZONE    #MAY-BE-WITHDRAWN
 
 ## After that enter run npm start and enter https://localhost:port/api-docs
