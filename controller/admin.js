@@ -27,7 +27,7 @@ export default class AdminController {
 
     static async statusHandler(req, res) {
         const serviceResponse = await AdminServices.statusUpdate(req.params.id, req.validateStatus);
-        console.log(serviceResponse);
+
         return serviceResponse.status === 'OK'
             ? res.status(200).json(serviceResponse)
             : res.status(400).json(serviceResponse);
